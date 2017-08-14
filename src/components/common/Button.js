@@ -13,16 +13,19 @@ const Button = ( {onPress,children}) => {
 
 export { Button};
 
+
+
 const styles ={
     buttonStyle :{
-        flex :1,
-        alignSelf :'stretch',
-        backgroundColor :'#fff',
-        borderRadius :5,
-        borderWidth :1,
-        borderColor : '#007aff',
-        marginLeft :5,
-        marginRight :5
+    flex:1,
+    alignSelf: 'stretch',
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#007aff',
+    marginLeft: 5,
+    marginRight: 5
+
     },
     textStyle:{
         alignSelf :'center',

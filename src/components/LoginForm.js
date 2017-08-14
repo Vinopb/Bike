@@ -1,10 +1,48 @@
 import React, { Component } from 'react';
-import {TextInput} from 'react-native';
-import {Button,Card,CardSection,Input } from './common'
+import firebase from 'firebase';
+import {Text} from 'react-native';
+import {Button,Card,CardSection,Input,Spinner} from './common'
 
 class LoginForm extends Component{
 
-state = { email :'',password :''};
+state = { email :'',password :'',error :'',loading:false};
+onButtonPress()
+{
+   const { email,password } = this.state;
+   this.setState ({error :'',loading:true});
+   firebase.auth().signInWithEmailAndPassword(this.state.email,this.state.password)
+   .then(this.onLoginSucess.bind(this))
+    .catch( ()=> {
+       firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
+       .then(this.onLoginSucess.bind(this))
+       .catch(this.onLoginFailed.bind(this))
+    });
+    //console.log(this.state);
+}
+
+onLoginFailed(){
+        this.setState ({
+         loading:false,
+         error:'Authentication Failed'
+    });
+}
+onLoginSucess(){
+    this.setState ({
+         email :'',
+         password :'',
+         loading:false,
+         error:''
+    });
+}
+
+renderButton(){
+    if(this.state.loading){
+        return <Spinner size="small"/>
+    }
+    else{
+        return <Button onPress= {this.onButtonPress.bind(this)}> Login </Button>
+    }
+}
 render(){
     return(
         <Card>
@@ -26,8 +64,11 @@ render(){
               secureTextEntry 
               />
          </CardSection>
+         <Text style ={styles.errorTextStyle}>
+             {this.state.error}
+         </Text>
          <CardSection>
-              <Button> Login </Button>
+             {this.renderButton()}
          </CardSection>
 
         </Card>
@@ -38,3 +79,12 @@ render(){
 }
 
 export default LoginForm;
+
+const styles ={
+    errorTextStyle:{
+        fontSize:20,
+        alignSelf :'center',
+        color :'red'
+    }
+
+}
